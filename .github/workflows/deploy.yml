@@ -1,7 +1,7 @@
 name: Deploy Go Project
 
 on:
-  pull_request:
+  push:
     branches:
       - 'smoreg/*'
 
