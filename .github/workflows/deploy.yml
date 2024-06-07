@@ -17,18 +17,13 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           echo "$FZ_ID_RSA" > ~/.ssh/id_rsa
-          wc ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
         env:
           FZ_ID_RSA: ${{ secrets.FZ_ID_RSA }}
 
       - name: Test SCP
         run: |
-          echo ho > ho
-          ls -l ~/.ssh
-          file ~/.ssh/id_rsa
-          head -n 5 ~/.ssh/id_rsa
-          
+          echo ho23 > ho
           scp -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ho deploy@64.227.168.9:~
         env:
           FZ_ID_RSA: ${{ secrets.FZ_ID_RSA }}
