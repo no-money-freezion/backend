@@ -3,7 +3,7 @@ name: Deploy Go Project
 on:
   pull_request:
     branches:
-      - 'smoreg/*'
+      - '**'
 
 jobs:
   build:
