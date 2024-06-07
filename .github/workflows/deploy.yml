@@ -43,22 +43,14 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
         env:
           FZ_ID_RSA: ${{ secrets.FZ_ID_RSA }}
-
-      - name: Set environment variables
-        run: |
-            echo "DB_HOST=${{ secrets.DB_HOST }}" >> $GITHUB_ENV
-            echo "DB_USER=${{ secrets.DB_USER }}" >> $GITHUB_ENV
-            echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_ENV
-            echo "DB_NAME=${{ secrets.DB_NAME }}" >> $GITHUB_ENV
-            echo "DB_SSLMODE=disable" >> $GITHUB_ENV
       
 
       - name: Copy files via scp
         run: |
-          scp -o StrictHostKeyChecking=no freezino_backend_app deploy@64.227.168.9:/opt/freezino_backend
+          scp -o StrictHostKeyChecking=no freezino_backend_app deploy@64.227.168.9:/opt/freezino_backend/freezino_backend_app_new
 
       - name: Restart application on server
-        env:
-          FZ_ID_RSA: ${{ secrets.FZ_ID_RSA }}
         run: |
+          ssh -o StrictHostKeyChecking=no deploy@64.227.168.9 "sudo systemctl stop freezino_backend.service"
+          ssh -o StrictHostKeyChecking=no deploy@64.227.168.9 "mv freezino_backend_app_new freezino_backend_app"
           ssh -o StrictHostKeyChecking=no deploy@64.227.168.9 "sudo systemctl restart freezino_backend.service"
