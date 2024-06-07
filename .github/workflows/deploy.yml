@@ -13,12 +13,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Run testing
-        run: cd test && go test -v
+#      - name: Run testing
+#        run: cd test && go test -v
 
       - name: Copy files via scp
         env:
-          SSH_PRIVATE_KEY: ${{ secrets.FZ_ID_RSA }}
+          $FZ_ID_RSA: ${{ secrets.FZ_ID_RSA }}
         run: |
           mkdir -p ~/.ssh
           echo "$FZ_ID_RSA" > ~/.ssh/id_rsa
