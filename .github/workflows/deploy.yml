@@ -23,13 +23,13 @@ jobs:
           mkdir -p ~/.ssh
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          scp -o StrictHostKeyChecking=no myapp user@yourserver:/path/to/deploy
+          scp -o StrictHostKeyChecking=no myapp deploy@64.227.168.9:/path/to/deploy
 
       - name: Restart application on server
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
-          ssh -o StrictHostKeyChecking=no user@yourserver "sudo systemctl restart yourapp.service"
+          ssh -o StrictHostKeyChecking=no deploy@64.227.168.9 "sudo systemctl restart yourapp.service"
 
       - name: Setup Go
         uses: actions/setup-go@v2
