@@ -34,7 +34,7 @@ jobs:
           go get -u golang.org/x/lint/golint
 
       - name: Run build
-        run: go build cmd/*.go -o freezino_backend_app
+        run: go build -o freezino_backend_app cmd/*.go
 
       - name: Set up SSH key
         run: |
