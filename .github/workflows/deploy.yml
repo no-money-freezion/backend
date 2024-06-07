@@ -24,7 +24,7 @@ jobs:
           echo "$FZ_ID_RSA" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           echo ho > ho
-          scp -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ho deploy@64.227.168.9:/~
+          scp -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ho deploy@64.227.168.9:~
 #
 #      - name: Restart application on server
 #        env:
