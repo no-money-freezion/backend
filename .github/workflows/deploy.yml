@@ -52,5 +52,5 @@ jobs:
       - name: Restart application on server
         run: |
           ssh -o StrictHostKeyChecking=no deploy@64.227.168.9 "sudo systemctl stop freezino_backend.service"
-          ssh -o StrictHostKeyChecking=no deploy@64.227.168.9 "mv freezino_backend_app_new freezino_backend_app"
+          ssh -o StrictHostKeyChecking=no deploy@64.227.168.9 "mv /opt/freezino_backend/freezino_backend_app_new /opt/freezino_backend/freezino_backend_app"
           ssh -o StrictHostKeyChecking=no deploy@64.227.168.9 "sudo systemctl restart freezino_backend.service"
