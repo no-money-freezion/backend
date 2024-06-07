@@ -10,21 +10,44 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v2
+
+      - name: Set up SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "$FZ_ID_RSA" | tr '_' '\n' > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+      - name: Test SCP
+        run: |
+          echo ho > ho
+          ls -l ~/.ssh
+          file ~/.ssh/id_rsa
+          head -n 5 ~/.ssh/id_rsa
+          scp -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ho deploy@64.227.168.9:~
+        env:
+          FZ_ID_RSA: ${{ secrets.FZ_ID_RSA }}
+
+#      - name: Checkout repository
+#        uses: actions/checkout@v2
 
 #      - name: Run testing
 #        run: cd test && go test -v
-
-      - name: Copy files via scp
-        env:
-          $FZ_ID_RSA: ${{ secrets.FZ_ID_RSA }}
-        run: |
-          mkdir -p ~/.ssh
-          echo "$FZ_ID_RSA" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          echo ho > ho
-          scp -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ho deploy@64.227.168.9:~
+#
+#      - name: Copy files via scp
+#        env:
+#          $FZ_ID_RSA: ${{ secrets.FZ_ID_RSA }}
+#        run: |
+#          mkdir -p ~/.ssh
+##         echo "$FZ_ID_RSA" > ~/.ssh/id_rsa
+#          echo "$FZ_ID_RSA" | tr -d '\r' | tr '_' '\n' > ~/.ssh/id_rsa
+#          chmod 600 ~/.ssh/id_rsa
+#          echo ho > ho
+#          ls -l ~/.ssh
+#          file ~/.ssh/id_rsa
+#          cat ~/.ssh/id_rsa
+#          scp -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ho deploy@64.227.168.9:~
 #
 #      - name: Restart application on server
 #        env:
