@@ -23,7 +23,7 @@ jobs:
           mkdir -p ~/.ssh
           echo "$FZ_ID_RSA" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          cat ~/.ssh/id_rsa
+          ping -c 1 64.227.168.9
           scp -o StrictHostKeyChecking=no myapp deploy@64.227.168.9:/path/to/deploy
 
       - name: Restart application on server
