@@ -10,8 +10,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
       - name: Checkout code
         uses: actions/checkout@v2
+
+      - name: Copy openapi file via scp
+        run: |
+            scp -o StrictHostKeyChecking=no openapi/openapi.yaml deploy@64.227.168.9:/opt/redoc
 
 #      - name: Run testing
 #        run: cd test && go test -v
@@ -43,7 +48,6 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
         env:
           FZ_ID_RSA: ${{ secrets.FZ_ID_RSA }}
-      
 
       - name: Copy files via scp
         run: |
