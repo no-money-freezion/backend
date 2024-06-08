@@ -1,0 +1,25 @@
+openapi: 3.0.0
+info:
+  title: Sample API
+  description: API для демонстрации OpenAPI
+  version: 1.0.0
+servers:
+  - url: http://api.sample.com/v1
+paths:
+  /users:
+    get:
+      summary: Получить список пользователей
+      responses:
+        '200':
+          description: Успешный ответ
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
