@@ -3,36 +3,54 @@ name: Deploy Go Project
 on:
   push:
     branches:
-      - main
+      - '**'
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Go
+#      - name: Run testing
+#        run: cd test && go test -v
+      #
+      #      - name: Run vet & lint
+      #        run: |
+      #          go vet .
+      #          golint .
+      #
+      #
+
+      - name: Setup Go
         uses: actions/setup-go@v2
         with:
           go-version: '1.21'
 
-      - name: Build Go project
-        run: go build -o myapp .
+      - name: Install dependencies
+        run: |
+          go version
+          go get -u golang.org/x/lint/golint
 
-      - name: Copy files via scp
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: Run build
+        run: go build -o freezino_backend_app cmd/*.go
+
+      - name: Set up SSH key
         run: |
           mkdir -p ~/.ssh
-          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          echo "$FZ_ID_RSA" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          scp -o StrictHostKeyChecking=no myapp user@yourserver:/path/to/deploy
+        env:
+          FZ_ID_RSA: ${{ secrets.FZ_ID_RSA }}
+      
+
+      - name: Copy files via scp
+        run: |
+          scp -o StrictHostKeyChecking=no freezino_backend_app deploy@64.227.168.9:/opt/freezino_backend/freezino_backend_app_new
 
       - name: Restart application on server
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
-          ssh -o StrictHostKeyChecking=no user@yourserver "sudo systemctl restart yourapp.service"
-
+          ssh -o StrictHostKeyChecking=no deploy@64.227.168.9 "sudo systemctl stop freezino_backend.service"
+          ssh -o StrictHostKeyChecking=no deploy@64.227.168.9 "mv /opt/freezino_backend/freezino_backend_app_new /opt/freezino_backend/freezino_backend_app"
+          ssh -o StrictHostKeyChecking=no deploy@64.227.168.9 "sudo systemctl restart freezino_backend.service"

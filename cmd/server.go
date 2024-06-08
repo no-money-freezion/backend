@@ -32,15 +32,16 @@ func main() {
 	var repoInstance repo.Repository
 
 	dbType := os.Getenv("DB_TYPE")
+	dbType = dbTypeInmemory
 
 	if dbType == dbTypeInmemory {
 		repoInstance = inmemory.NewRepository()
 	} else {
 
-		host := pkg.GetEnvWithDefault("DB_HOST", "db")
-		user := pkg.GetEnvWithDefault("DB_USER", "postgres")
+		host := pkg.GetEnvWithDefault("DB_HOST", "127.0.0.1")
+		user := pkg.GetEnvWithDefault("DB_USER", "freezino_admin")
 		password := pkg.GetEnvWithDefault("DB_PASSWORD", "postgres")
-		dbname := pkg.GetEnvWithDefault("DB_NAME", "postgres")
+		dbname := pkg.GetEnvWithDefault("DB_NAME", "freezino_database")
 		sslmode := pkg.GetEnvWithDefault("DB_SSLMODE", "disable")
 
 		connStr := fmt.Sprintf("host=%s user=%s password=%s dbname=%s sslmode=%s",
