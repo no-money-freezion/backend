@@ -5,6 +5,7 @@ go 1.22.1
 require (
 	github.com/go-playground/validator/v10 v10.18.0
 	github.com/lib/pq v1.10.9
+	github.com/rs/cors v1.11.0
 )
 
 require (

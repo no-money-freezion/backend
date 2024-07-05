@@ -1,10 +1,11 @@
 // Package app Description: This file contains the router logic for the application.
-package app
+package main
 
 import (
 	"backend/internal/app/handler"
 	"backend/internal/repo"
 	"backend/internal/service"
+	"github.com/rs/cors"
 	"net/http"
 )
 
@@ -21,16 +22,27 @@ func NewApp(s service.Service, r repo.Repository) *App {
 }
 
 func (r *App) Start() error {
-
 	h := handler.NewHandler(r.Service, r.Repo)
 
-	http.HandleFunc("GET /health", h.HealthHandler)
-	http.HandleFunc("POST /auth/register", h.RegisterHandler)
-	http.HandleFunc("POST /auth/login", h.LoginHandler)
-	http.HandleFunc("POST /auth/password-recovery", h.PasswordRecoveryHandler)
-	http.HandleFunc("POST /auth/password-reset", h.PasswordResetHandler)
-	http.HandleFunc("POST /roulette/info", h.RouletteInfoHandler)
-	http.HandleFunc("POST /roulette/bet", h.RouletteBetHandler)
+	mux := http.NewServeMux()
+	mux.HandleFunc("/health", h.HealthHandler)
+	mux.HandleFunc("/auth/register", h.RegisterHandler)
+	mux.HandleFunc("/auth/login", h.LoginHandler)
+	mux.HandleFunc("/auth/password-recovery", h.PasswordRecoveryHandler)
+	mux.HandleFunc("/auth/password-reset", h.PasswordResetHandler)
+	mux.HandleFunc("/roulette/info", h.RouletteInfoHandler)
+	mux.HandleFunc("/roulette/bet", h.RouletteBetHandler)
 
-	return http.ListenAndServe(":8080", nil)
+	// Define CORS options
+	c := cors.New(cors.Options{
+		AllowedOrigins:   []string{"http://example.com", "http://anotherdomain.com", "*"},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE"},
+		AllowedHeaders:   []string{"Content-Type", "Authorization"},
+		AllowCredentials: true,
+	})
+
+	// Wrap the mux with the CORS middleware
+	handler := c.Handler(mux)
+
+	return http.ListenAndServe(":8080", handler)
 }
