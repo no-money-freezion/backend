@@ -1,5 +1,5 @@
 // Package app Description: This file contains the router logic for the application.
-package main
+package app
 
 import (
 	"backend/internal/app/handler"
